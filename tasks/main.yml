@@ -3,13 +3,10 @@
     win_chocolatey:
       name: '{{ item }}'
       state: present
-    with_items:
-      - dt-agent
-      - dt-console
-      - fslogix
+    with_items: '{{ citrix_rdsh_software }}'
     register: sw_installed
       
-  - name: Install Printers
+  - name: Install Printers # Very unique to the deviceTRUST environment.
     win_shell: |
       if(get-printerdriver -name "Generic / Text Only"){}else{Add-PrinterDriver -Name "Generic / Text Only"}
       if(get-printer -name "Corporate"){}else{Add-Printer -Name "Corporate" -DriverName "Generic / Text Only" -PortName LPT1:}
@@ -18,15 +15,13 @@
     args:
         creates: C:\Logs\done-printer-install.txt
 
-  - name: Copy FSLogix FXA file
-    ansible.builtin.copy:
-      src: files/NotepadPlusPlus.fxa
-      dest: C:\Program Files\FSLogix\Apps\Rules\NotepadPlusPlus.fxa
-
-  - name: Copy FSLogix FXR file
-    ansible.builtin.copy:
-      src: files/NotepadPlusPlus.fxr
-      dest: C:\Program Files\FSLogix\Apps\Rules\NotepadPlusPlus.fxr
+  - name: Copy FSLogic files
+    win_copy:
+      src: '{{ item }}'
+      dest: '{{ citrix_rdsh_fslogix_folder }}'
+    with_fileglob:
+      - "*.fxa"
+      - "*.fxr"
 
   - name: Reboot
     ansible.windows.win_reboot:

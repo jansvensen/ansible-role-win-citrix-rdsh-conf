@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - citrix-rdsh-configure
+    - ansible-role-win-citrix-rdsh-conf
