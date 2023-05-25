@@ -15,7 +15,7 @@
     args:
         creates: C:\Logs\done-printer-install.txt
 
-  - name: Copy FSLogic files
+  - name: Copy FSLogix files
     win_copy:
       src: '{{ item }}'
       dest: '{{ citrix_rdsh_fslogix_folder }}'
