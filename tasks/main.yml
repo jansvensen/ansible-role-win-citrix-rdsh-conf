@@ -13,7 +13,7 @@
       if(get-printer -name "Floor 1"){}else{Add-Printer -Name "Floor 1" -DriverName "Generic / Text Only" -PortName LPT2:}
       if(get-printer -name "Floor 2"){}else{Add-Printer -Name "Floor 2" -DriverName "Generic / Text Only" -PortName LPT3:}
     args:
-        creates: C:\Logs\done-printer-install.txt
+        creates: {{ directory_logging }}done-printer-install.txt
 
   - name: Copy FSLogix files
     win_copy:
