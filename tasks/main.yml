@@ -1,10 +1,10 @@
 ---
-  - name: Install packages with chocolatey
-    win_chocolatey:
-      name: '{{ item }}'
-      state: present
-    with_items: '{{ citrix_rdsh_software }}'
-    register: sw_installed
+  #- name: Install packages with chocolatey
+  #  win_chocolatey:
+  #    name: '{{ item }}'
+  #    state: present
+  #  with_items: '{{ citrix_rdsh_software }}'
+  #  register: sw_installed
       
   - name: Install Printers # Very unique to the deviceTRUST environment.
     win_shell: |
