@@ -1,11 +1,4 @@
----
-  - name: Install packages with chocolatey
-    win_chocolatey:
-      name: '{{ item }}'
-      state: present
-    with_items: '{{ citrix_rdsh_software }}'
-    register: config_changed
-      
+---   
   - name: Install Printers # Very unique to the deviceTRUST environment.
     win_shell: |
       if(get-printerdriver -name "Generic / Text Only"){}else{Add-PrinterDriver -Name "Generic / Text Only"}
