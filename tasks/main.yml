@@ -18,7 +18,7 @@
   - name: Copy FSLogix files
     win_copy:
       src: '{{ item }}'
-      dest: '{{ citrix_rdsh_fslogix_folder }}'
+      dest: '{{ citrix.rdsh.fslogix.rulesfolder }}'
     with_fileglob:
       - "*.fxa"
       - "*.fxr"
