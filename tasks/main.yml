@@ -1,4 +1,11 @@
----   
+---
+  - name: Install packages with chocolatey
+    win_chocolatey:
+      name: '{{ item }}'
+      state: present
+    with_items: '{{ citrix_rdsh_software }}'
+    register: sw_installed
+      
   - name: Install Printers # Very unique to the deviceTRUST environment.
     win_shell: |
       if(get-printerdriver -name "Generic / Text Only"){}else{Add-PrinterDriver -Name "Generic / Text Only"}
@@ -6,7 +13,7 @@
       if(get-printer -name "Floor 1"){}else{Add-Printer -Name "Floor 1" -DriverName "Generic / Text Only" -PortName LPT2:}
       if(get-printer -name "Floor 2"){}else{Add-Printer -Name "Floor 2" -DriverName "Generic / Text Only" -PortName LPT3:}
     args:
-        creates: '{{ win.directory.logging }}done-printer-install.txt'
+        creates: {{ directory_logging }}done-printer-install.txt
 
   - name: Copy FSLogix files
     win_copy:
@@ -16,57 +23,6 @@
       - "*.fxa"
       - "*.fxr"
 
-  - name: Add or update registry
-    ansible.windows.win_regedit:
-      path: HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components
-      name: IsInstalled
-      data: 0
-    register: config_changed
-
-  - name: Add or update registry
-    ansible.windows.win_regedit:
-      path: HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}
-      name: IsInstalled
-      data: 0
-    register: config_changed
-
-  - name: Add or update registry
-    ansible.windows.win_regedit:
-      path: HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}
-      name: IsInstalled
-      data: 0
-    register: config_changed
-    
-  - name: Add or update registry
-    ansible.windows.win_regedit:
-      path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-      name: Hidden
-      data: 1
-    register: config_changed
-
-  - name: Add or update registry
-    ansible.windows.win_regedit:
-      path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-      name: HideFileExt
-      data: 0
-    register: config_changed
-
-  - name: Add or update registry
-    ansible.windows.win_regedit:
-      path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-      name: AlwaysShowMenus
-      data: 1
-      type: dword
-    register: config_changed
-
-  - name: Add or update registry
-    ansible.windows.win_regedit:
-      path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-      name: NavPaneExpandToCurrentFolder
-      data: 1
-      type: dword
-    register: config_changed
-
   - name: Reboot
     ansible.windows.win_reboot:
-    when: config_changed.changed
+    when: sw_installed.changed
