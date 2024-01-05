@@ -3,7 +3,7 @@
     win_chocolatey:
       name: '{{ item }}'
       state: present
-    with_items: '{{ citrix_rdsh_software }}'
+    with_items: '{{ win_software_chocolatey_citrix }}'
     register: sw_installed
       
   - name: Install Printers # Very unique to the deviceTRUST environment.
