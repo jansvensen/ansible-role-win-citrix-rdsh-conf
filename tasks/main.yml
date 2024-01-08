@@ -25,13 +25,13 @@
 
   - name: Set DDC Reg Keys
     ansible.windows.win_regedit:
-      path: HKLM\Software\Citrix
+      path: HKLM:\Software\Citrix
       name: VirtualDesktopAgent
       data: citrix-ctrl-01.dt.democloud
 
   - name: Set DDC Reg Keys
     ansible.windows.win_regedit:
-      path: HKLM\Software\Wow6432Node\Citrix
+      path: HKLM:\Software\Wow6432Node\Citrix
       name: VirtualDesktopAgent
       data: citrix-ctrl-01.dt.democloud
 
