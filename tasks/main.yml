@@ -37,6 +37,18 @@
       data: '{{ citrix.site.ddc }}'
     register: changes_made
 
+  - name: Create Wallpaper Folder
+    win_file:
+      path: '{{ citrix.rdsh.misc.wallpaperfolder }}'
+      state: directory
+
+  - name: Copy Wallpaper
+    win_copy:
+      src: '{{ item }}'
+      dest: '{{ citrix.rdsh.misc.wallpaperfolder }}'
+    with_fileglob:
+      - "*.jpg"
+
   - name: Reboot
     ansible.windows.win_reboot:
     when: changes_made.changed
